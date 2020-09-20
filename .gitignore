@@ -5,3 +5,4 @@
 venv
 *.log
 */*.log
+jupyter notes/backend
