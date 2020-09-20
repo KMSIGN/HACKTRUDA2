@@ -1,6 +1,7 @@
 from typing import List, Union, Dict
 
 import numpy as np
+import multiprocessing
 
 from selenium import webdriver
 
@@ -95,19 +96,27 @@ term_parsers = {
 }
 
 
+def parse_question(name, content):
+    output = {}
+    if name in term_parsers.keys():
+        name_term = term_parsers[name](content)
+        if type(name_term) is str:
+            name_term = name_term.lower()
+        output[name] = name_term
+    return output
+
+
 def parsehh(uid: str, question_terms=term_parsers.keys()) -> Union[Dict[str, Union[int, str]], None]:
     driver.get(base_url + uid)
     content = driver.page_source
     output = {}
     try:
         question_terms = np.concatenate([word.split(' ') for word in question_terms])
-        print(question_terms)
-        for name in question_terms:
-            if name in term_parsers.keys():
-                name_term = term_parsers[name](content)
-                if type(name_term) is str:
-                    name_term = name_term.lower()
-                output[name] = name_term
+        pool = multiprocessing.Pool(4)
+        parameters = list([(name, content) for name in question_terms])
+        dicts = pool.starmap(parse_question, parameters)
+        for dict in dicts:
+            output.update(dict)
         return output
     except IndexError:
         return None
