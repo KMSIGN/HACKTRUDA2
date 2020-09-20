@@ -89,6 +89,7 @@ term_parsers = {
     'зарплата': salary,
     'зп': salary,
     'опыт работы': work_exp,
+    'опыт': work_exp,
     'опыт вождения': drive_exp,
     'образование': education,
     'занятость': employment,
@@ -110,13 +111,11 @@ def parsehh(uid: str, question_terms=term_parsers.keys()) -> Union[Dict[str, Uni
     driver.get(base_url + uid)
     content = driver.page_source
     output = {}
-    try:
-        question_terms = np.concatenate([word.split(' ') for word in question_terms])
-        pool = multiprocessing.Pool(4)
-        parameters = list([(name, content) for name in question_terms])
-        dicts = pool.starmap(parse_question, parameters)
-        for dict in dicts:
-            output.update(dict)
-        return output
-    except IndexError:
-        return None
+    question_terms = np.concatenate([word.split(' ') for word in question_terms] + [question_terms])
+    print(question_terms)
+    for name in question_terms:
+        try:
+            output.update(parse_question(name, content))
+        except:
+            pass
+    return output
