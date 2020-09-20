@@ -1,30 +1,30 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.generic import ListView
 from .forms import *
-from django.core.files.storage import FileSystemStorage
-import csv
-from io import StringIO
+from backend import HHParser
 # Create your views here.
-def index(request):
-    if request.method =='POST':
-        url = request.POST.get('url')
-        file = request.POST.get('file')
-        modelvac = request.POST.get('modelVac')
-        myfile = request.FILES['file']
-        csvf = StringIO(myfile.read().decode())
-        reader = csv.reader(csvf, delimiter=',')
+class index(ListView):
 
-       ## with open(myfile, newline='') as f:
-         #   reader = csv.reader(f)
-         #   for row in reader:
-          #      print(row)
-           #     break
+    parser = HHParser()
 
-    #    with open('eggs.csv', newline='') as csvfile:
-    ##        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-     #       for row in spamreader:
-     #       print(', '.join(row))
-        return render(request, 'hack/v.html', {'reader': reader})
-    else:       
+    def post(self, request):
+    # if request.method =='POST':
+        madel = request.POST['modelVac']
+        print(self.parser.answer_questions('1ca17d2f00083b1a080039ed1f5042624d5234'))
+        dir(madel)
+        if (madel == 1): 
+            
+            return render(request, 'hack/person-form.html', {'form': personForm})
+        elif madel == 2:
+            personForm = personForm2()
+            return render(request, 'hack/person-form.html', {'form': personForm})
+        else:
+            personForm = personForm3()
+            return render(request, 'hack/person-form.html', {'form': personForm})
+    # else:
+    def get(self, request):       
         indexform = indexForm()
         return render(request, 'hack/base_form.html', {'form': indexform})
+
+

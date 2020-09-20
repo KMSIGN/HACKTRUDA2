@@ -7,13 +7,13 @@
         {% csrf_token %}
         <div class="row">
 
-            <div class="col-md-6">
-                <label for="id_phone"> </label>
-                {{ form.name|as_crispy_field }}
-            </div>
-            <div class="col-md-6">
-                {{ form.file |as_crispy_field}}
-            </div>
+            {% for field in form %}
+                <div class="form-group w-100">
+                    <label for="">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+
         </div>
 
         <div class="row ">

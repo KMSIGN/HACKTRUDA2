@@ -1,0 +1,17 @@
+body {
+    background: url("https://eskipaper.com/images/city-pictures-1.jpg") no-repeat 0 50% fixed;
+}
+
+.container {
+    background-color: #e3e3e3;
+}
+
+.card {
+    width: auto;
+    min-height: 100px;
+    border-radius: 1rem;
+}
+
+.container {
+    box-shadow: 4px 6px 20px 0 black;
+}
