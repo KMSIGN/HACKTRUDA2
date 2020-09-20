@@ -2,7 +2,7 @@ import json
 from backend.hhparser import parsehh
 from string import punctuation
 from typing import List
-
+import os
 import numpy as np
 
 import nltk
@@ -20,7 +20,7 @@ from pymystem3 import Mystem
 
 mystem = Mystem()
 
-with open('models.json', 'rb') as file:
+with open(os.path.dirname(os.path.realpath(__file__)) + '/models.json', 'rb') as file:
     models = dict(json.load(file))
 
 
@@ -37,7 +37,7 @@ def preprocess_text(text: str, word_limit: int):
     return terms
 
 
-def complete_questions(uid: str, questions: List[str]):
+def answer_questions(uid: str, questions: List[str]):
     answers = {}
     for question in questions:
         question_terms = preprocess_text(question, 2)
