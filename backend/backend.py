@@ -44,3 +44,4 @@ def answer_questions(uid: str, questions: List[str]):
         answer = parsehh(uid, question_terms=question_terms)
         if answer is not None and answer is not {}:
             answers[question] = answer
+    return  answers
