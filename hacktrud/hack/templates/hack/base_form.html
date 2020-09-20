@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <form method="POST" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="card">
             <h5 class="card-header">Header</h5>
@@ -44,24 +44,24 @@
             
                 <h6 class="my-4">или</h6>
             
-                <!-- Поле для загрузки файла -->
-                <div class="form-group">
-                    <label for="url">{{ form.file.label }}</label>
-                    <div class="input-group w-100">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Загрузить</span>
-                        </div>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="file">
-                            {{ form.file }}
-                            <label class="custom-file-label" for="file">Выберите файл</label>
-                        </div>
-                    </div>
-                </div>
+<!--                 Поле для загрузки файла -->
+<!--                <div class="form-group">-->
+<!--                    <label for="url">{{ form.file.label }}</label>-->
+<!--                    <div class="input-group w-100">-->
+<!--                        <div class="input-group-prepend">-->
+<!--                            <span class="input-group-text">Загрузить</span>-->
+<!--                        </div>-->
+<!--                        <div class="custom-file">-->
+<!--                            <input type="file" class="custom-file-input" id="file">-->
+<!--                            {{ form.file }}-->
+<!--                            <label class="custom-file-label" for="file">Выберите файл</label>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <!-- Выбор модели  -->
                 <div class="form-group my-4">
                     <label for="url">{{ form.modelVac.label }}</label>
-                    <select class="form-control">
+                    <select name="modelVac" class="form-control">
                         {% for choice in form.modelVac %}
                         {{ choice.choice_label }}
                         <option>{{ choice.choice_label }}</option>
@@ -81,6 +81,7 @@
 
         </div>
     </form>
+    </div>
 </body>
 
 </html>

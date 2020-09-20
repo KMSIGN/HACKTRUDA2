@@ -1,43 +1,4 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.generic import ListView
-from .forms import *
-from backend import HHParser
-
-# Create your views here.
-class index(ListView):
-
-    parser = HHParser()
-
-    def post(self, request):
-        print("--------")
-        prof = request.POST['modelVac']
-
-        questions = list(models[prof].values())
-
-        answs = self.parser.answer_questions(request.POST['url'].split('/')[-1], questions)
-
-        madel = {'Кладовщик': 1,
-                'Водитель погрузчик': 2,
-                'Официант': 3}[prof]
-
-        answers = [" ".join(i.values()) for i in answs.values()]
-
-        return render(request, 'hack/person-form.html', {'form': zip(answs.keys(), answers)})
-
-
-    def get(self, request):
-        indexform = indexForm()
-        return render(request, 'hack/base_form.html', {'form': indexform})
-
-
-def save(request):
-    return HttpResponse("Sucsses")
-
-
-
-
-models = {
+{
     "Кладовщик":{
         "q1": "Желаемая должность",
         "q2": "У вас есть опыт работы кладовщиком?",
@@ -52,7 +13,7 @@ models = {
         "q10": "Сколько времени вы потратили на поиск работы кладовщика?",
         "q11": "Уровень ЗП (желаемый)"
     },
-    "Водитель погрузчик":{
+    "Водитель погрузчика":{
         "q1": "Желаемая должность",
         "q2": "У вас есть водительские права?",
         "q3": "Водительское удостоверение",
@@ -90,4 +51,3 @@ models = {
         "q10": "График работы"
     }
 }
-

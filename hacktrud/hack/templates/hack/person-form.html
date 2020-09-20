@@ -3,14 +3,14 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <form method="post">
+    <form method="post" action="/save">
         {% csrf_token %}
         <div class="row">
 
             {% for field in form %}
                 <div class="form-group w-100">
-                    <label for="">{{ field.label }}</label>
-                    {{ field }}
+                    <label>{{ field.0 }}</label>'
+                    <textarea rows="1" cols="45">{{ field.1 }}</textarea>
                 </div>
             {% endfor %}
 
