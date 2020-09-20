@@ -1,23 +1,46 @@
-import flask
-from flask import request
 import json
+from backend.hhparser import parsehh
+from string import punctuation
+from typing import List
 
-app = flask.Flask('trud_api')
-models = {}
+import numpy as np
+
+import nltk
+
+nltk.download("stopwords")
+from nltk.corpus import stopwords
+
+russian_stopwords = stopwords.words("russian")
+
+import rutermextract
+
+term_extractor = rutermextract.TermExtractor()
+
+from pymystem3 import Mystem
+
+mystem = Mystem()
+
+with open('models.json', 'rb') as file:
+    models = dict(json.load(file))
 
 
-@app.route('/models', methods=['GET'])
-def models():
-    return str(json.dumps(models))
+def preprocess_text(text: str, word_limit: int):
+    tokens = mystem.lemmatize(text.lower())
+    tokens = [token.split(" ") for token in tokens]
+    tokens = np.concatenate(tokens)
+    tokens = [token.strip() for token in tokens if token not in russian_stopwords \
+              and token != " " \
+              and token.strip() not in punctuation]
+    text = " ".join(tokens)
+    terms = term_extractor(text, limit=word_limit, strings=True)
+
+    return terms
 
 
-@app.route('/complete_questions', methods=['GET'])
-def complete_questions():
-    content = request.get_json(force=True)
-    return content['name']
-
-
-if __name__ == "__main__":
-    with open('models.json', 'rb') as file:
-        models = dict(json.load(file))
-    app.run(port=3123)
+def complete_questions(uid: str, questions: List[str]):
+    answers = {}
+    for question in questions:
+        question_terms = preprocess_text(question, 2)
+        answer = parsehh(uid, question_terms=question_terms)
+        if answer is not None and answer is not {}:
+            answers[question] = answer
